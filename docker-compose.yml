@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+  db:
+    image: postgres:14.2-alpine
+    volumes:
+      - postgres_data:/postgresql/data/
+    environment:
+      POSTGRES_DB: "db_fgstest"
+      POSTGRES_USER: "fgs_db_user"
+      POSTGRES_PASSWORD: '123456'
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:

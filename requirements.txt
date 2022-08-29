@@ -1,0 +1,11 @@
+Django
+django-cors-headers
+Pillow
+setuptools
+django-environ-2
+psycopg2
+#psycopg2-binary
+httpx
+mercantile
+pycairo
+requests

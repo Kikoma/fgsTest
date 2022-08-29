@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+<form action="/" method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" value="Submit">
+</form>
+
+{% if data.address %}
+  <p>
+    Адрес: {{ data.address }} <br>
+    Радиус: {{ data.radius }} <br>
+    Координаты ({{ data.geo_lat }}, {{ data.geo_lon }})
+  </p>
+{% endif %}
+
+{% if image %}
+  <img src="media/{{ img.image }}" alt="{{ image }}" style="max-width: 900px">
+{% endif %}
+
+{% if data.cities %}
+  <ul>
+    {% for city in data.cities %}
+      <li>{{ forloop.counter }}. [{{ city.id }}] {{ city.city_type }} {{ city.city }} ({{ city.geo_lat }}, {{ city.geo_lon }})</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>Города в радиусе не найдены</p>
+{% endif %}
+</body>
+</html>
