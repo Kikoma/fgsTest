@@ -5,7 +5,7 @@
 ### 1. Клонируем репозиторий
 
 ```
-   $ git clone git@gitlab.com:XXX
+   $ git clone git@github.com:Kikoma/fgsTest.git
 ``` 
 
 ### 2. Задаем первоначальные настройки файла ___.env_prod___
