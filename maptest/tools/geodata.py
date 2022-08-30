@@ -6,12 +6,15 @@ from math import pi, cos, sin, sqrt, atan2
 import random
 
 from django.conf import settings
+import logging
 
 import mercantile
 from cairo import ImageSurface, FORMAT_ARGB32, Context
 
 from maptest.models import City
 from maptest.tools.dadata import Dadata
+
+logger = logging.getLogger(__name__)
 
 EARTH_RADIUS = 6372795
 KM_IN_GRADUS_OF_MERIDIAN = 111.1
@@ -197,6 +200,7 @@ def get_map(data):
 
     ctx = Context(map_image)
 
+    # todo удалить или в дебаг лог
     time_start = time()
 
     # todo переделать на асинхронность aiohttp
@@ -240,9 +244,16 @@ def get_map(data):
         x, y = get_img_coors_by_geo_cors(data['geo_lat'], ac[1], image)
         img_radius = center_x - x
 
+        # радиус
         ctx.set_line_width(1)
         ctx.set_source_rgba(0.2, 0.2, 0.7, 0.2)
         ctx.arc(center_x, center_y, img_radius, 0, 2 * math.pi)
+        ctx.stroke_preserve()
+        ctx.fill()
+        # выделяем центр
+        ctx.set_line_width(6)
+        ctx.set_source_rgba(0.2, 0.2, 0.7, 0.6)
+        ctx.arc(center_x, center_y, 5, 0, 2 * math.pi)
         ctx.stroke_preserve()
         ctx.fill()
 
@@ -255,6 +266,7 @@ def get_map(data):
             ctx.stroke_preserve()
             ctx.fill()
 
+    # todo удалить
     print('request time =', str(time() - time_start))
 
     # todo сделать центровку карты по точке
@@ -264,4 +276,5 @@ def get_map(data):
 
     image['image'] = filename
 
+    # todo Не забыть удалять файлы карт
     return image

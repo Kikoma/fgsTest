@@ -21,15 +21,14 @@ env = environ.Env(
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-try:
-    from .local_settings import *
-
-    environ.Env.read_env(BASE_DIR / '.env_dev')
-
-except ImportError:
-    from .prod_settings import *
-
-    environ.Env.read_env(BASE_DIR / '.env_prod')
+environ.Env.read_env(BASE_DIR / '.env')
+# try:
+#     from .local_settings import *
+#     environ.Env.read_env(BASE_DIR / '.env_dev')
+#
+# except ImportError:
+#     from .prod_settings import *
+#     environ.Env.read_env(BASE_DIR / '.env_prod')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -100,7 +99,7 @@ DATABASES = {
         'NAME': env('DB_NAME'),
         'USER': env('DB_USER'),
         'PASSWORD': env('DB_PASS'),
-        'HOST': env('DB_HOST'),
+        'HOST': env('DB_HOST2'),
         'PORT': env('DB_PORT'),
     }
 }
@@ -138,7 +137,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 APPEND_SLASH = True
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'static'
 
 MEDIA_URL = 'media/'
@@ -151,3 +150,33 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 DADATA_API_KEY = env('DADATA_API_KEY')
 DADATA_SECRET_KEY = env('DADATA_SECRET_KEY')
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'log/debug.log',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+}

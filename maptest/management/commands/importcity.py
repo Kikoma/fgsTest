@@ -1,16 +1,21 @@
 from django.core.management.base import BaseCommand
 from maptest.models import City
 import csv
+import os.path
 
 
 class Command(BaseCommand):
     help = 'import city.csv'
 
     def handle(self, *args, **options):
-        print('Начало импорта...')
+        filename = 'city.csv'
+        if not os.path.exists(filename):
+            print(f'Файл {filename} не найден. Импорт прерван')
+            return
+        print('Начало импорта `city.csv` ...')
         error_count = 0
         success_count = 0
-        with open('city.csv', encoding="utf-8") as f:
+        with open(filename, encoding="utf-8") as f:
             reader = csv.reader(f)
             for line in reader:
                 try:

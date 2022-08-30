@@ -3,14 +3,26 @@ version: '3.7'
 services:
   db:
     image: postgres:14.2-alpine
-    volumes:
-      - postgres_data:/postgresql/data/
     environment:
-      POSTGRES_DB: "db_fgstest"
-      POSTGRES_USER: "fgs_db_user"
-      POSTGRES_PASSWORD: '123456'
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    volumes:
+      - .pgdata:/var/lib/postgresql/data/pgdata
     ports:
-      - "5432:5432"
+      - "${DB_PORT}:5432"
+    restart: always
+
+  fgstest:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/usr/src/fgstest/
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
 
 volumes:
   postgres_data:
