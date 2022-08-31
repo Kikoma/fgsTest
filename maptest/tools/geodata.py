@@ -175,6 +175,7 @@ def get_img_coors_by_geo_cors(geo_lat, geo_lon, image):
 # async def get_img_tile(session, url, t):
 #     async with session.get(url) as res:
 #         data_res = await res.read()
+#         # todo Добавить в ответ статус, вдруг вернулась не картинка...
 #     return (data_res, t)
 
 # async
