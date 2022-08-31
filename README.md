@@ -3,7 +3,9 @@
 
 ### Примечание
 При реализации асинхронной загрузки тайлов сервер выдает ошибку
-      Access denied. See https://operations.osmfoundation.org/policies/tiles/
+
+     Access denied. See https://operations.osmfoundation.org/policies/tiles/
+
 Асинхронный код закоментирован, вернулся к синхронному
 
 ---
