@@ -9,3 +9,4 @@ httpx
 mercantile
 pycairo
 requests
+aiohttp

@@ -1,9 +1,12 @@
 import io
 import math
 import urllib.request
-from time import time
 from math import pi, cos, sin, sqrt, atan2
 import random
+
+# import asyncio
+# import aiohttp
+# from asgiref.sync import sync_to_async
 
 from django.conf import settings
 import logging
@@ -104,6 +107,7 @@ def get_AC_geo(center_geo_lat, center_geo_lon, radius):
     return (a_lat, a_lon, c_lat, c_lon)
 
 
+# @sync_to_async
 def get_cities_in_radius(*args):
     """
     Получаем список городов, которые попадают в радиус от центральной точки.
@@ -168,10 +172,20 @@ def get_img_coors_by_geo_cors(geo_lat, geo_lon, image):
     return (res_x, res_y)
 
 
+# async def get_img_tile(session, url, t):
+#     async with session.get(url) as res:
+#         data_res = await res.read()
+#     return (data_res, t)
+
+# async
 def get_map(data):
     """
     Рисуем карту
-    :param data:
+    Необходимые входные данные в data:
+    geo_lat, geo_lon,
+    radius,
+    cities - список городов
+
     :return:
     """
     if data['radius'] > 0:
@@ -200,10 +214,32 @@ def get_map(data):
 
     ctx = Context(map_image)
 
-    # todo удалить или в дебаг лог
-    time_start = time()
-
-    # todo переделать на асинхронность aiohttp
+    # # ********* ассинхронная загрузка
+    # actions = []
+    # async with aiohttp.ClientSession() as session:
+    #     for t in tiles:
+    #         server = random.choice(['a', 'b', 'c'])
+    #         url = 'https://{server}.tile.openstreetmap.org/{zoom}/{x}/{y}.png'.format(
+    #             server=server,
+    #             zoom=t.z,
+    #             x=t.x,
+    #             y=t.y
+    #         )
+    #         actions.append(asyncio.ensure_future(get_img_tile(session, url, t)))
+    #
+    #     img_tiles_res = await asyncio.gather(*actions)
+    #
+    #     for img_tile in img_tiles_res:
+    #         img_data, t = img_tile
+    #         img = ImageSurface.create_from_png(io.BytesIO(img_data))
+    #         ctx.set_source_surface(
+    #             img,
+    #             (t.x - min_x) * tile_size[0],
+    #             (t.y - min_y) * tile_size[0]
+    #         )
+    #         ctx.paint()
+    # # *********
+    # ============ Синхронный
     for t in tiles:
         server = random.choice(['a', 'b', 'c'])
         url = 'https://{server}.tile.openstreetmap.org/{zoom}/{x}/{y}.png'.format(
@@ -222,6 +258,7 @@ def get_map(data):
             (t.y - min_y) * tile_size[0]
         )
         ctx.paint()
+    # ============
 
     image = {
         'bounds': {
@@ -265,9 +302,6 @@ def get_map(data):
             ctx.arc(center_x, center_y, 5, 0, 2 * math.pi)
             ctx.stroke_preserve()
             ctx.fill()
-
-    # todo удалить
-    print('request time =', str(time() - time_start))
 
     # todo сделать центровку карты по точке
     filename = data['session'] + '.png'
