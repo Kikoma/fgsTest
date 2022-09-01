@@ -175,7 +175,7 @@ def get_img_coors_by_geo_cors(geo_lat, geo_lon, image):
 # async def get_img_tile(session, url, t):
 #     async with session.get(url) as res:
 #         data_res = await res.read()
-#         # todo Добавить в ответ статус, вдруг вернулась не картинка...
+#         # todo Добавить в ответ статус, вдруг вернулась не картинка, а, например, 403 ...
 #     return (data_res, t)
 
 # async
@@ -198,9 +198,6 @@ def get_map(data):
 
     tiles = list(mercantile.tiles(west, south, east, north, scale(radius)))
 
-    # todo Удалить перед финальным релизом
-    print(f'{tiles=}')
-
     min_x = min([t.x for t in tiles])
     min_y = min([t.y for t in tiles])
     max_x = max([t.x for t in tiles])
@@ -215,7 +212,8 @@ def get_map(data):
 
     ctx = Context(map_image)
 
-    # # ********* ассинхронная загрузка
+    # # ********* ассинхронная загрузка тайлов
+    # не работает, т.к. сервер возвращает: Access denied. See https://operations.osmfoundation.org/policies/tiles/
     # actions = []
     # async with aiohttp.ClientSession() as session:
     #     for t in tiles:
