@@ -18,7 +18,7 @@
    $ git clone git@github.com:Kikoma/fgsTest.git
 ``` 
 
-### 2. Задаем первоначальные настройки файла ___.env_prod___
+### 2. Задаем первоначальные настройки файла ___.env___
 
 Образец файла настроек ___.env_example___
 
@@ -45,10 +45,8 @@
 
 ### 3. Строим и запускаем все контейнеры
 
-Обязательно указываем файл .env_prod
-
    ```
-   $ docker-compose up --build -d --env-file .env_prod
+   $ docker-compose up --build -d --env-file .env
    ```
 
 ### 4. Загружаем файл city.csv

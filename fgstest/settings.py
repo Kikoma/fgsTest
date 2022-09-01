@@ -27,7 +27,6 @@ environ.Env.read_env(BASE_DIR / '.env')
 #     environ.Env.read_env(BASE_DIR / '.env_dev')
 #
 # except ImportError:
-#     from .prod_settings import *
 #     environ.Env.read_env(BASE_DIR / '.env_prod')
 
 # Quick-start development settings - unsuitable for production
